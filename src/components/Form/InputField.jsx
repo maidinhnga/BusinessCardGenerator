@@ -1,5 +1,5 @@
-import React, { useCallback } from 'react';
-import { TextField } from '@material-ui/core';
+import React, { useCallback } from "react";
+import { TextField } from "@material-ui/core";
 
 const InputField = ({
   field: { onChange: onFieldChange, onBlur: onFieldBlur, name, value },
@@ -29,6 +29,7 @@ const InputField = ({
   return (
     <TextField
       {...props}
+      id={name}
       defaultValue={value}
       name={name}
       onChange={handleOnChange}

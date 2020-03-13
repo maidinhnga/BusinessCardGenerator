@@ -1,15 +1,12 @@
-import React, { useRef } from 'react';
-import { Button } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
-import Card from './Card';
-import { saveAs } from 'file-saver';
+import React, { useRef } from "react";
+import { Button } from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
+import Card from "./Card";
 
 const Download = props => {
   const ref = useRef();
   const handleDownload = () => {
-    ref.current.downloadCard(blob => {
-      saveAs(blob, 'card.jpg');
-    });
+    ref.current.downloadCard();
   };
   return (
     <>

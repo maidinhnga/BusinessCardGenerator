@@ -1,79 +1,103 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Button } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import InputField from '../../Form/InputField';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { Button } from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
+import { Formik, Form, ErrorMessage, FastField } from "formik";
+import InputField from "../../Form/InputField";
 
 const useStyles = makeStyles(theme => ({
   field: {
-    marginBottom: '20px'
+    marginBottom: "20px"
   },
   error: {
-    color: 'red',
-    display: 'flex',
-    justifyContent: 'flex-start'
+    color: "red",
+    display: "flex",
+    justifyContent: "flex-start"
+  },
+  root: {
+    width: "300px",
+    paddingTop: "10px"
   }
 }));
 
 const validateEmail = values => {
-  debugger;
   const { email } = values;
-  if (!email) {
-    return { email: 'Email is required' };
-  }
+  const accessKey = process.env.REACT_APP_ACCESS_KEY;
   return fetch(
-    `https://apilayer.net/api/check?access_key=19d37420a42397aa6fe50941f35f841f&email=${email}&smtp=1&format=1`
+    `https://apilayer.net/api/check?access_key=${accessKey}&email=${email}&smtp=1&format=1`
   )
     .then(response => response.json())
     .then(res => {
-      if (!res['format_valid']) return { email: 'Invalid email address' };
+      if (!res["format_valid"]) return { email: "Invalid email address" };
       return {};
     });
 };
-const InfoForm = ({ onSubmit, initValues }) => {
+const InfoForm = ({ onSubmit }) => {
   const classes = useStyles();
   return (
-    <Formik
-      initialValues={initValues || {}}
-      validate={validateEmail}
-      onSubmit={values => {
-        onSubmit(() => onSubmit(values));
-      }}
-    >
-      {({ isSubmitting }) => (
+    <div className={classes.root}>
+      <Formik
+        initialValues={{
+          firstName: "",
+          lastName: "",
+          company: "",
+          email: "",
+          phone: ""
+        }}
+        validate={validateEmail}
+        onSubmit={onSubmit}
+      >
         <Form>
           <div className={classes.field}>
-            <Field label="First Name" name="firstName" component={InputField} />
+            <FastField
+              label="First Name"
+              name="firstName"
+              component={InputField}
+            />
           </div>
           <div className={classes.field}>
-            <Field label="Last Name" name="lastName" component={InputField} />
+            <FastField
+              label="Last Name"
+              name="lastName"
+              component={InputField}
+            />
           </div>
           <div className={classes.field}>
-            <Field label="Company Name" name="company" component={InputField} />
+            <FastField
+              label="Company Name"
+              name="company"
+              component={InputField}
+            />
           </div>
           <div className={classes.field}>
-            <Field label="Email Address" name="email" component={InputField} />
+            <FastField
+              label="Email Address"
+              name="email"
+              component={InputField}
+            />
             <div className={classes.error}>
               <ErrorMessage name="email" component="div" />
             </div>
           </div>
           <div className={classes.field}>
-            <Field label="Phone Number" name="phone" component={InputField} />
+            <FastField
+              label="Phone Number"
+              name="phone"
+              component={InputField}
+            />
           </div>
 
           <Button
             variant="contained"
-            color="secondary"
+            color="primary"
             startIcon={<AddIcon />}
             type="submit"
-            disabled={isSubmitting}
           >
             Submit
           </Button>
         </Form>
-      )}
-    </Formik>
+      </Formik>
+    </div>
   );
 };
 
